@@ -1,6 +1,6 @@
 from pathlib import Path
-from environ import (DJANGO_SK, POSTGRES_USER, POSTGRES_PASSWORD,
-                     POSTGRES_DB, POSTGRES_PORT, POSTGRES_HOST)
+from environ import (DJANGO_SK, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB,
+                     POSTGRES_PORT, POSTGRES_HOST, REDIS_HOST, REDIS_PORT)
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,6 +14,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,7 +54,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'djangochat.wsgi.application'
 ASGI_APPLICATION = 'djangochat.asgi.application'
 
 
@@ -103,5 +103,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "core.User"
 
 LOGOUT_REDIRECT_URL = 'frontpage'
-LOGIN_REDIRECT_URL = 'frontpage'
+LOGIN_REDIRECT_URL = 'rooms:rooms'
 LOGIN_URL = 'login'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, int(REDIS_PORT))],
+        },
+    },
+}

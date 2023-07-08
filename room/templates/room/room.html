@@ -2,37 +2,47 @@
 
 {% block title %}{{ room.name }} | {% endblock %}
 
+{% block head %}
+    <style>
+        .chat-messages {
+            height: 55vh;
+            overflow-y: auto;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: lightseagreen;
+            opacity: .5;
+            border: 4px solid transparent;
+            border-radius: 9px;
+            background-clip: padding-box;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 18px;
+        }
+    </style>
+
+{% endblock %}
+
 
 {% block content %}
-    <div class="p-10 lg:p-20 text-center">
-        <h1 class="text-3xl lg: text-6xl text-white">{{ room.name }}</h1>
+    <div class="p-5 lg:p-10 text-center">
+        <h1 class="text-2xl lg: text-6xl text-white">{{ room.name }}</h1>
     </div>
 
-    <div class="lg:w-2/4 mx-4 lg: mx-auto p-4 bg-white rounded-xl">
-        <div class="chat-messages space-y-3" id="chat-mesaages">
-            <div class="p-4 bg-gray-200 rounded-xl">
-                <p class="font-semibold">Username</p>
-                <p>The message itself</p>
-            </div>
+    <div class="w-3/4 lg:w-2/4 mx-4 lg: mx-auto p-4 bg-white rounded-xl">
+        <div class="chat-messages space-y-2" id="chat-messages">
+            {% for message in messages %}
+                <div class="px-4 py-2 bg-gray-200 rounded-xl">
+                    <p class="font-semibold">{{ message.user }}</p>
+                    <p>{{ message.content }}</p>
+                </div>
 
-            <div class="p-4 bg-gray-200 rounded-xl">
-                <p class="font-semibold">Username</p>
-                <p>The message itself</p>
-            </div>
-
-            <div class="p-4 bg-gray-200 rounded-xl">
-                <p class="font-semibold">Username</p>
-                <p>The message itself</p>
-            </div>
-
-            <div class="p-4 bg-gray-200 rounded-xl">
-                <p class="font-semibold">Username</p>
-                <p>The message itself</p>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
-    <div class="lg:w-2/4 mt-6 mx-4 lg:mx-auto p-4 bg-white rounded-xl">
+    <div class="w-3/4 lg:w-2/4 mt-6 mx-auto lg:mx-auto p-4 bg-white rounded-xl">
         <form class="flex">
             <input type="text"
                    name="content"
@@ -41,10 +51,75 @@
                    id="chat-message-input">
             <button class="px-3 py-3 rounded-xl text-white bg-teal-600
                            hover:bg-teal-700 ease-in-out duration-200"
-                    id="chat-message-submit">
+                    id="chat-message-send">
                 Send
             </button>
         </form>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        const roomName = `{{ room.slug }}`;
+        const username = `{{ request.user.username }}`;
+        const sendButton = document.querySelector('#chat-message-send');
+        const messages = document.querySelector('#chat-messages')
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + roomName
+            + '/'
+        );
+        chatSocket.onmessage = function(event) {
+            console.log('onmessage')
+
+            const data = JSON.parse(event.data);
+
+            if (data.message) {
+                let html = `<div class="px-4 py-2 bg-gray-200 rounded-xl">
+                            <p class="font-semibold">${data.username}</p>
+                            <p>${data.message}</p>
+                            </div>`
+
+                messages.innerHTML += html
+
+                scrollToBottom();
+            } else {
+                alert('The message was empty')
+            }
+        }
+        
+        chatSocket.onclose = function (event) {
+            console.log('onclose')
+        }
+
+        //
+
+        sendButton.onclick = function (event) {
+            event.preventDefault();
+            const messageInput = document.querySelector('#chat-message-input');
+            const message = messageInput.value;
+
+            if (message.length > 0) {
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': username,
+                    'room': roomName
+                }));
+            }
+
+            messageInput.value = '';
+        }
+
+
+        function scrollToBottom() {
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        scrollToBottom()
+    </script>
 {% endblock %}

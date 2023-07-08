@@ -8,9 +8,11 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 django = "^4.2.3"
-channels = "^4.0.0"
 python-dotenv = "^1.0.0"
 psycopg2-binary = "^2.9.6"
+channels-redis = "^4.1.0"
+setuptools = "^68.0.0"
+channels = {extras = ["daphne"], version = "^4.0.0"}
 
 
 [build-system]

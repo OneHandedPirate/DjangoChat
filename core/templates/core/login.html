@@ -3,11 +3,11 @@
 {% block title %}Login | {% endblock %}
 
 {% block content %}
-    <div class="p-10 lg:p-20 text-center">
+    <div class="p-5 lg:p-10 text-center">
         <h1 class="text-3xl lg: text-6xl text-white">Log in</h1>
     </div>
 
-    <form method="post" class="lg:w-1/4 px-4 mx-auto">
+    <form method="post" class="w-5/6 md:w-3/6 lg:w-2/6 px-4 mx-auto">
         {% csrf_token %}
         <div class="mb-5">
             <label class="text-white" for="username">Username</label>
@@ -18,14 +18,16 @@
             <input type="password" id="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl">
         </div>
 
-        {% if form.errors %}
+       {% if form.errors %}
+            <ul class="mb-7">
             {% for field in form %}
                 {% for error in field.errors %}
-                    <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
-                        <p>{{ error|escape }}</p>
-                    </div>
+                    <li class="mb-2 p-2 rounded-xl bg-red-300 text-black text-center">
+                        {{ field.name }}: {{ error }}
+                    </li>
                 {% endfor %}
             {% endfor %}
+            </ul>
         {% endif %}
 
         <button class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-800 ease-in-out duration-200">Log in</button>

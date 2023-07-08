@@ -1,4 +1,5 @@
 from django.db import models
+from core.models import User
 
 
 class Room(models.Model):
@@ -9,3 +10,15 @@ class Room(models.Model):
     def __str__(self):
         return self.name
 
+
+class Message(models.Model):
+    room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE)
+    content = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-added_at',)
+
+    def __str__(self):
+        return f'{self.content} - {self.added_at}'
