@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}DjangoChat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-teal-500">
+    <nav class="flex items-center justify-between px-4 py-6 bg-teal-800 shadow-2xl">
+        <div>
+            <a href="{% url 'frontpage' %}" class="text-2xl text-white">DjangoChat</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'rooms:rooms' %}" class="text-white hover:text-gray-200 px-4">
+                Rooms
+            </a>
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-3 rounded-xl text-white bg-teal-500
+               hover:bg-teal-600 ease-in-out duration-200">
+                Log out
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="text-white hover:text-gray-200 px-4">
+                Log in
+            </a>
+            <a href="{% url 'signup' %}"
+               class="px-4 py-3 rounded-xl text-white bg-teal-500 hover:bg-teal-600 ease-in-out duration-200">
+                Sign up
+            </a>
+        {% endif %}
+        </div>
+    </nav>
+
+    {% block content%}
+    {% endblock %}
+</body>
+
+</html>
