@@ -1,4 +1,6 @@
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
+
 from core.models import User
 
 
@@ -6,6 +8,14 @@ class Room(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     password = models.CharField(max_length=100, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
+    def check_password(self, password):
+        return check_password(password, self.password)
 
     def __str__(self):
         return self.name
