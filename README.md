@@ -1,11 +1,12 @@
 <h1 align="center">Django Chat</h1>
 <p align="center">Simple chat app with Django, channels and Redis</p>
 <hr>
-<h3 align="center">Prerequisites:</h3>
+
+### Prerequisites:
 - Installed docker and docker-compose.<br>
 - Installed poetry.<br>
 
-<h3 align="center">Installation:</h3>
+### Installation:
 - Clone project code and cd into the created folder:
     ```
     git clone https://github.com/OneHandedPirate/DjangoChat.git
@@ -15,8 +16,12 @@
     ```
     poetry install
     ```
+- Enter virtual environment: 
+  ```
+  poetry shell
+  ```
 - Create `.env` file in the DjangoChat folder with the following set of variables:
-    ```
+  ```
     DJANGO_SK - Django Secret Key
     POSTGRES_USER - username for postgres
     POSTGRES_PASSWORD - password for postgres
@@ -25,8 +30,8 @@
     POSTGRES_PORT - port for postgres
     
     REDIS_HOST - redis host
-    REDIS_PORT - redis port
-    ```
+    REDIS_PORT - redis port 
+  ```
 - Bring up docker-compose stack with the following command (in root folder):
   ```
   make up
@@ -49,7 +54,7 @@
 - In the admin tab create room(s) (password for rooms is optional).
 
 
-<h3 align="center">Paths:</h3>
+### Paths:
 `/singup` - registration form.<br>
 `/login` - login form for registered users.<br>
 `/rooms` - list of chat rooms available.<br>
