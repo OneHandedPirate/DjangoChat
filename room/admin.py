@@ -6,5 +6,12 @@ from room.models import Room, Message
 class RoomAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
-admin.site.register(Message)
+
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('content', 'room', 'user', 'added_at')
+    list_filter = ('room', 'user')
+    ordering = ('-added_at',)
+
+
+admin.site.register(Message, MessageAdmin)
 
