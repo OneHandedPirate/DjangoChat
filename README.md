@@ -4,7 +4,6 @@
 
 ### Prerequisites:
 - Installed docker and docker-compose.<br>
-- Installed poetry.<br>
 
 ### Installation:
 - Clone project code and cd into the created folder:
@@ -12,15 +11,29 @@
     git clone https://github.com/OneHandedPirate/DjangoChat.git
     cd DjangoChat
     ```
-- Install project dependencies via poetry:
-    ```
-    poetry install
-    ```
-- Enter virtual environment: 
-  ```
-  poetry shell
-  ```
-- Create `.env` file in the DjangoChat folder with the following set of variables:
+- If you use `poetry`:
+    + Install project dependencies:
+      ```
+      poetry install
+      ```
+    + Activate poetry virtual environment:
+      ```
+      poetry shell
+      ```
+- If you not use `poetry`: 
+    + Create virtual environment:
+      ```
+      virtualenv venv
+      ```
+    + Activate newly created venv:
+      ```
+      source venv/bin/activate
+      ```
+    + Install dependencies:
+      ```
+      pip install -r requirements.txt
+      ```
+- Create `.env` file in the root folder with the following set of variables:
   ```
     DJANGO_SK - Django Secret Key
     POSTGRES_USER - username for postgres
